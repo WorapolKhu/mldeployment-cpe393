@@ -12,6 +12,10 @@ with open("model.pkl", "rb") as f:
 def home():
     return "ML Model is Running"
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
+
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
