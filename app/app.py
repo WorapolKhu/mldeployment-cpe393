@@ -15,12 +15,12 @@ def home():
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
-    input_features = np.array(data["features"]).reshape(1, -1)
-    prediction = model.predict(input_features)
-    confidence = model.predict_proba(input_features).max()
+    input_features = np.array(data["features"])  # Accept a list of inputs
+    predictions = model.predict(input_features).tolist()  # Predict for all inputs
+    confidences = model.predict_proba(input_features).max(axis=1).tolist()  # Get max confidence for each input
     return jsonify({
-        "prediction": int(prediction[0]),
-        "confidence": round(float(confidence), 2)
+        "predictions": [int(pred) for pred in predictions],
+        "confidences": [round(float(conf), 2) for conf in confidences]
     })
 
 if __name__ == "__main__":
